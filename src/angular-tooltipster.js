@@ -4,8 +4,9 @@
             restrict: 'A',
             scope: {
                 tooltipTitle: '@',
-                tooltipTitleVariable: '=',
-                tooltipOptions: "="
+                tooltipTitleContent: '=?',
+                tooltipTitleVariable: '=?',
+                tooltipOptions: "=?"
             },
             link: function(scope, element, attrs) {
                 var isTooltipDynamicVariable = (scope.tooltipTitleVariable !== undefined);
@@ -14,7 +15,7 @@
                     return;
                 }
                 
-                var tooltipOptions = scope.tooltipOptions || {};
+                var tooltipOptions = scope.tooltipOptions || {theme: 'tooltipster-light'};
                 var message = scope.tooltipTitle;
                 if (isTooltipDynamicVariable) {
                     message = scope.tooltipTitleVariable;
@@ -28,8 +29,13 @@
                     });
                 }
 
+
                 tooltipOptions.content = message;
                 element.tooltipster(tooltipOptions);
+
+                if(scope.tooltipTitleContent) {
+                    element.tooltipster('content', $(scope.tooltipTitleContent));
+                }
 
                 scope.$on("$destroy", function () {
                     element.tooltipster('destroy');
